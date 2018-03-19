@@ -22,13 +22,9 @@ class EncodingTest {
         );
     }
 
-    private Checker check(byte... bytes) {
-        return new Checker(bytes);
-    }
-
     @Test
     void testOneByte() throws IOException {
-        check((byte) 'k').isEncodedAs(
+        check((int) 'k').isEncodedAs(
             Emojis.MAPPING[((int) 'k') << 2],
             Emojis.PADDING,
             Emojis.PADDING,
@@ -38,7 +34,7 @@ class EncodingTest {
 
     @Test
     void testTwoBytes() throws IOException {
-        check((byte) 0, (byte) 1).isEncodedAs(
+        check(0, 1).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.PADDING,
@@ -48,7 +44,7 @@ class EncodingTest {
 
     @Test
     void testThreeBytes() throws IOException {
-        check((byte) 0, (byte) 1, (byte) 2).isEncodedAs(
+        check(0, 1, 2).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.MAPPING[128],
@@ -58,28 +54,28 @@ class EncodingTest {
 
     @Test
     void testFourBytes() throws IOException {
-        check((byte) 0, (byte) 1, (byte) 2, (byte) 0).isEncodedAs(
+        check(0, 1, 2, 0).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.MAPPING[128],
             Emojis.PADDING_40
         );
 
-        check((byte) 0, (byte) 1, (byte) 2, (byte) 1).isEncodedAs(
+        check(0, 1, 2, 1).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.MAPPING[128],
             Emojis.PADDING_41
         );
 
-        check((byte) 0, (byte) 1, (byte) 2, (byte) 2).isEncodedAs(
+        check(0, 1, 2, 2).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.MAPPING[128],
             Emojis.PADDING_42
         );
 
-        check((byte) 0, (byte) 1, (byte) 2, (byte) 3).isEncodedAs(
+        check(0, 1, 2, 3).isEncodedAs(
             Emojis.MAPPING[0],
             Emojis.MAPPING[16],
             Emojis.MAPPING[128],
@@ -89,7 +85,7 @@ class EncodingTest {
 
     @Test
     void testFiveBytes() throws IOException {
-        check((byte) 0xAB, (byte) 0xCD, (byte) 0xEF, (byte) 0x01, (byte) 0x23).isEncodedAs(
+        check(0xAB, 0xCD, 0xEF, 0x01, 0x23).isEncodedAs(
             Emojis.MAPPING[687],
             Emojis.MAPPING[222],
             Emojis.MAPPING[960],
@@ -97,7 +93,16 @@ class EncodingTest {
         );
     }
 
+    private Checker check(int... ints) {
+        byte[] bytes = new byte[ints.length];
+        for (int i = 0; i < ints.length; ++i) {
+            bytes[i] = (byte) ints[i];
+        }
+        return new Checker(bytes);
+    }
+
     private static class Checker {
+
         private final byte[] bytes;
 
         private Checker(byte[] bytes) {
