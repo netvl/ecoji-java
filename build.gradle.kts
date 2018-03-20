@@ -10,6 +10,7 @@ version = "1.0.0-SNAPSHOT"
 plugins {
     java
     idea
+    id("com.adarshr.test-logger").version("1.1.2")
 }
 
 repositories {
@@ -18,12 +19,14 @@ repositories {
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.1.0")
+    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.1.0")
 }
 
 val generatedSourcesDir = File(buildDir, "generated/java")
 
 configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
 
     sourceSets {
         "main" {
@@ -74,13 +77,32 @@ tasks {
                 output.println("            MAPPING_REV.put(MAPPING[i], i);")
                 output.println("        }")
                 output.println("    }")
+                output.println("    static int revMapGetOrZero(int k) {")
+                output.println("        Integer value = MAPPING_REV.get(k);")
+                output.println("        if (value == null) {")
+                output.println("            return 0;")
+                output.println("        } else {")
+                output.println("            return value;")
+                output.println("        }")
+                output.println("    }")
+
+                output.println("    static boolean isValidAlphabetChar(int c) {")
+                output.println("        return c == PADDING || c == PADDING_40 || c == PADDING_41 ||")
+                output.println("               c == PADDING_42 || c == PADDING_43 || MAPPING_REV.containsKey(c);")
+                output.println("    }")
+
 
                 output.println("}")
             }
         }
     }
 
+    "test"(Test::class) {
+        useJUnitPlatform()
+    }
+
     "compileJava" {
         dependsOn(generateEmojiMapping)
     }
 }
+

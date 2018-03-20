@@ -8,7 +8,7 @@ public final class Ecoji {
     private Ecoji() {
     }
 
-    public static Encoder encoder() {
+    public static Encoder getEncoder() {
         return new Encoder();
     }
 
@@ -20,7 +20,7 @@ public final class Ecoji {
             return new Target(inputStream);
         }
 
-        public Target readFrom(byte[] bytes){
+        public Target readFrom(byte[] bytes) {
             return readFrom(new ByteArrayInputStream(bytes));
         }
 
@@ -35,18 +35,61 @@ public final class Ecoji {
         public static class Target {
             private final InputStream source;
 
-            Target(InputStream source) {
+            private Target(InputStream source) {
                 this.source = source;
             }
 
-            public void writeTo(Writer writer) throws IOException {
-                EcojiEncoding.encode(source, writer);
+            public int writeTo(Writer writer) throws IOException {
+                return EcojiEncoding.encode(source, writer);
             }
 
             public String writeToString() throws IOException {
                 StringWriter sw = new StringWriter();
                 writeTo(sw);
                 return sw.toString();
+            }
+        }
+    }
+
+    public static Decoder getDecoder() {
+        return new Decoder();
+    }
+
+    public static class Decoder {
+        private Decoder() {
+        }
+
+        public Target readFrom(Reader reader) {
+            return new Target(reader);
+        }
+
+        public Target readFrom(String string) {
+            return readFrom(new StringReader(string));
+        }
+
+        public static class Target {
+            private final Reader source;
+
+            private Target(Reader source) {
+                this.source = source;
+            }
+
+            public int writeTo(OutputStream outputStream) throws IOException {
+                return EcojiDecoding.decode(source, outputStream);
+            }
+
+            public byte[] writeToBytes() throws IOException {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                writeTo(outputStream);
+                return outputStream.toByteArray();
+            }
+
+            public String writeToString(Charset charset) throws IOException {
+                return new String(writeToBytes(), charset);
+            }
+
+            public String writeToString() throws IOException {
+                return writeToString(StandardCharsets.UTF_8);
             }
         }
     }
