@@ -5,7 +5,7 @@ import java.nio.file.StandardOpenOption
 import java.io.PrintWriter
 
 group = "io.github.netvl.ecoji"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 plugins {
     java
@@ -18,6 +18,8 @@ repositories {
 }
 
 dependencies {
+    testImplementation("com.google.guava", "guava", "24.1-jre")
+    testImplementation("org.quicktheories", "quicktheories", "0.25")
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.1.0")
     testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.1.0")
 }
@@ -104,5 +106,9 @@ tasks {
     "compileJava" {
         dependsOn(generateEmojiMapping)
     }
-}
+
+    "compileTestJava"(JavaCompile::class) {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
 

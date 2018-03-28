@@ -4,12 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 
-/**
- * Date: 19.03.18
- * Time: 21:16
- *
- * @author Vladimir Matveev
- */
 class EcojiDecoding {
     static int decode(Reader source, OutputStream destination) throws IOException {
         int bytesWritten = 0;
@@ -26,7 +20,8 @@ class EcojiDecoding {
             for (int i = 1; i < 4; ++i) {
                 chars[i] = checkCodePoint(readCodePoint(source));
                 if (chars[i] == -1) {
-                    throw new IOException("Unexpected end of data, input code points count is not a multiple of 4");
+                    throw new IOException("Unexpected end of data, the number of input Unicode code points " +
+                                          "is not a multiple of 4");
                 }
             }
 
