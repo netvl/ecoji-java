@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  *
  * <p>As a general rule, for {@link Encoder} the input is an {@link InputStream} and the output is a {@link Writer}.
  * For {@link Decoder} it's in the opposite way: the input is a {@link Reader} and the output is a {@link OutputStream}.
- * However, both provide convenice methods to encode from or decode to {@link String}s and {@code byte[]}s.</p>
+ * However, both provide convenience methods to encode from or decode to {@link String}s and {@code byte[]}s.</p>
  *
  * <p>For example:</p>
  *
