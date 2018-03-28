@@ -7,15 +7,16 @@ import java.nio.charset.StandardCharsets;
 /**
  * The main entry point for Ecoji encoding/decoding.
  *
- * Use the {@link #getEncoder()} and {@link #getDecoder()} methods to obtain an instance of {@link Encoder} and
+ * <p>Use the {@link #getEncoder()} and {@link #getDecoder()} methods to obtain an instance of {@link Encoder} and
  * {@link Decoder}, respectively. These classes can then be used to read encoded or decoded data and produce base-1024
- * decoded or encoded data.
+ * decoded or encoded data.</p>
  *
- * As a general rule, for {@link Encoder} the input is an {@link InputStream} and the output is a {@link Writer}.
+ * <p>As a general rule, for {@link Encoder} the input is an {@link InputStream} and the output is a {@link Writer}.
  * For {@link Decoder} it's in the opposite way: the input is a {@link Reader} and the output is a {@link OutputStream}.
- * However, both provide convenice methods to encode from or decode to {@link String}s and {@code byte[]}s.
+ * However, both provide convenice methods to encode from or decode to {@link String}s and {@code byte[]}s.</p>
  *
- * For example:
+ * <p>For example:</p>
+ *
  * <pre>
  *   String encoded = Ecoji.getEncoder().readFrom("hello world").writeToString();
  *   String decoded = Ecoji.getDecoder().readFrom(encoded).writeToString();
@@ -50,8 +51,8 @@ public final class Ecoji {
         /**
          * Uses the provided {@link InputStream} as a bytes source.
          *
-         * The provided stream will be read entirely, however, it won't be closed automatically. There are
-         * no limitations on the contents of the stream.
+         * <p>The provided stream will be read entirely, however, it won't be closed automatically. There are
+         * no limitations on the contents of the stream.</p>
          *
          * @param inputStream A sequence of bytes which should be encoded as emojis.
          *
@@ -111,10 +112,10 @@ public final class Ecoji {
              * Writes the base-1024 representation of bytes contained in the previously specified source to the
              * provided {@link Writer}.
              *
-             * Note that most of the emoji used in the alphabet do not belong to the Basic Multilingual Plane, therefore
-             * they are encoded as a pair of UTF-16 code units, i.e. as a surrogate pair.
+             * <p>Note that most of the emoji used in the alphabet do not belong to the Basic Multilingual Plane,
+             * therefore they are encoded as a pair of UTF-16 code units, i.e. as a surrogate pair.</p>
              *
-             * The passed {@link Writer} will not be closed after the operation finishes.
+             * <p>The passed {@link Writer} will not be closed after the operation finishes.</p>
              *
              * @param writer An {@link Writer} which will accept the Ecoji-encoded data.
              *
@@ -130,8 +131,8 @@ public final class Ecoji {
              * Writes the base-1024 representation of bytes contained in the previously specified source as a
              * {@link String}.
              *
-             * Note that most of the emoji used in the alphabet do not belong to the Basic Multilingual Plane, therefore
-             * they are encoded as a pair of UTF-16 code units, i.e. as a surrogate pair.
+             * <p>Note that most of the emoji used in the alphabet do not belong to the Basic Multilingual Plane,
+             * therefore they are encoded as a pair of UTF-16 code units, i.e. as a surrogate pair.</p>
              *
              * @return A {@link String} containing the base-1024 representation of the input.
              *
@@ -169,10 +170,10 @@ public final class Ecoji {
         /**
          * Uses the provided {@link Reader} as a source of emoji characters.
          *
-         * The provided stream will be read entirely, however, it won't be closed automatically. It is expected that
+         * <p>The provided stream will be read entirely, however, it won't be closed automatically. It is expected that
          * the entirety of the stream is a valid Ecoji-encoded data; if any of the code points read from the stream
          * do not belong to the Ecoji alphabet, an exception will be thrown. An exception will also be thrown if
-         * the number of code points in the input is not a multiple of 4.
+         * the number of code points in the input is not a multiple of 4.</p>
          *
          * @param reader A {@link Reader} which contains Ecoji-encoded data.
          *
@@ -185,9 +186,9 @@ public final class Ecoji {
         /**
          * Uses the provided {@link String} as a source of emoji characters.
          *
-         * It is expected that the entire string contains valid Ecoji-encoded data; if any of the code points of which
-         * the string consists of do not belong to the Ecoji alphabet, an exception will be thrown. An exception will
-         * also be thrown if the number of code points in the string is not a multiple of 4.
+         * <p>It is expected that the entire string contains valid Ecoji-encoded data; if any of the code points of
+         * which the string consists of do not belong to the Ecoji alphabet, an exception will be thrown. An exception
+         * will also be thrown if the number of code points in the string is not a multiple of 4.</p>
          *
          * @param string A {@link String} containing Ecoji-encoded data.
          *
@@ -211,7 +212,7 @@ public final class Ecoji {
              * Writes the original representation of the base-1024 encoded data contained in the previously specified
              * source to the provided {@link OutputStream}.
              *
-             * The provided {@link OutputStream} will not be closed when the operation finishes.
+             * <p>The provided {@link OutputStream} will not be closed when the operation finishes.</p>
              *
              * @param outputStream An {@link OutputStream} which accept the original representation of the base-1024
              *                     encoded data.
@@ -245,9 +246,9 @@ public final class Ecoji {
              * Returns the original representation of the base-1024 encoded data contained in the previously specified
              * source as a {@link String}, decoding it using the provided {@link Charset}.
              *
-             * If the decoded bytes do not form a valid string in the specified encoding, then according to the
+             * <p>If the decoded bytes do not form a valid string in the specified encoding, then according to the
              * contract of the {@link String#String(byte[], Charset)} constructor, invalid characters will be replaced
-             * with the replacement characters for this encoding.
+             * with the replacement characters for this encoding.</p>
              *
              * @param charset A character encoding which is used to decode the string.
              *
@@ -265,9 +266,9 @@ public final class Ecoji {
              * Returns the original representation of the base-1024 encoded data contained in the previously specified
              * source as a {@link String}, decoding it using the UTF-8 encoding.
              *
-             * If the decoded bytes do not form a valid UTF-8 string, then according to the contract of the
+             * <p>If the decoded bytes do not form a valid UTF-8 string, then according to the contract of the
              * {@link String#String(byte[], Charset)} constructor, invalid characters will be replaced with the
-             * UTF-8 replacement characters.
+             * UTF-8 replacement characters.</p>
              *
              * @return A {@link String} decoded using the UTF-8 encoding from the original representation
              * of the base-1024 encoded data contained in the provided source.
