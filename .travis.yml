@@ -1,0 +1,10 @@
+notifications:
+  email:
+    recipients:
+      - dpx.infinity@gmail.com
+      
+language: java
+
+script:
+  - ./gradlew check
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./gradlew gitPublishPush; fi

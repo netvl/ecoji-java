@@ -1,3 +1,4 @@
+import org.ajoberstar.gradle.git.publish.GitPublishExtension
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -11,6 +12,7 @@ plugins {
     java
     idea
     id("com.adarshr.test-logger").version("1.1.2")
+    id("org.ajoberstar.git-publish").version("0.3.3")
 }
 
 repositories {
@@ -42,6 +44,22 @@ configure<JavaPluginConvention> {
 configure<IdeaModel> {
     module {
         generatedSourceDirs.add(generatedSourcesDir)
+    }
+}
+
+configure<GitPublishExtension> {
+    repoUri = if (System.getenv("CI") != null) {
+        "https://github.com/netvl/ecoji-java.git"
+    } else {
+        "git@github.com:netvl/ecoji-java.git"
+    }
+
+    branch = "gh-pages"
+
+    contents {
+        from(tasks["javadoc"]) {
+            into("api")
+        }
     }
 }
 
@@ -112,3 +130,7 @@ tasks {
         targetCompatibility = "1.8"
     }
 
+    "gitPublishCopy" {
+        dependsOn(tasks["javadoc"])
+    }
+}
