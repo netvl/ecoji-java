@@ -1,4 +1,4 @@
-# Ecoji
+# Ecoji [![Maven](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/io/github/netvl/ecoji/ecoji/maven-metadata.xml.svg?style=flat-square)](http://search.maven.org/#artifactdetails%7Cio.github.netvl.ecoji%7Cecoji%7C1.0.0%7Cjar)  [![Travis](https://img.shields.io/travis/netvl/ecoji-java.svg?style=flat-square)](https://travis-ci.org/netvl/ecoji-java) [![Javadocs](https://img.shields.io/badge/documentation-docs.rs-green.svg?style=flat-square)](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/package-summary.html)
 
 A Rust implementation of the [Ecoji](https://github.com/keith-turner/ecoji) encoding standard.
 
@@ -30,7 +30,7 @@ SBT:
 libraryDependencies += "io.github.netvl.ecoji" % "ecoji" % versions.ecoji
 ```
 
-Use the latest available version, which can be found in [Maven Central](TODO) or on the badge at the top of this file.
+Use the latest available version, which you can find in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.netvl.ecoji%22%20a%3A%22ecoji%22) or on the badge at the top of this file.
 
 Afterwards, import the [`io.github.netvl.ecoji.Ecoji`](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/Ecoji.html) class and use its [`getEncoder()`](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/Ecoji.html#getEncoder--) and [`getDecoder()`](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/Ecoji.html#getDecoder--) static methods to obtain instances of the [`Ecoji.Encoder`](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/Ecoji.Encoder.html) and [`Ecoji.Decoder`](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/Ecoji.Decoder.html) classes. These can then be used to describe encoding/decoding sources and targets. For example:
 
