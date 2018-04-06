@@ -1,9 +1,13 @@
+import com.jfrog.bintray.gradle.Artifact
+import com.jfrog.bintray.gradle.BintrayExtension
+import com.jfrog.bintray.gradle.RecordingCopyTask
 import org.ajoberstar.gradle.git.publish.GitPublishExtension
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.io.PrintWriter
+import java.util.Properties
 
 group = "io.github.netvl.ecoji"
 version = "1.0.0"
@@ -11,8 +15,10 @@ version = "1.0.0"
 plugins {
     java
     idea
+    `maven-publish`
     id("com.adarshr.test-logger").version("1.1.2")
     id("org.ajoberstar.git-publish").version("0.3.3")
+    id("com.jfrog.bintray").version("1.7.3")
 }
 
 repositories {
@@ -28,7 +34,7 @@ dependencies {
 
 val generatedSourcesDir = File(buildDir, "generated/java")
 
-configure<JavaPluginConvention> {
+java {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7
 
@@ -41,13 +47,13 @@ configure<JavaPluginConvention> {
     }
 }
 
-configure<IdeaModel> {
+idea {
     module {
         generatedSourceDirs.add(generatedSourcesDir)
     }
 }
 
-configure<GitPublishExtension> {
+gitPublish {
     repoUri = if (System.getenv("CI") != null) {
         "https://github.com/netvl/ecoji-java.git"
     } else {
@@ -59,6 +65,92 @@ configure<GitPublishExtension> {
     contents {
         from(tasks["javadoc"]) {
             into("api")
+        }
+    }
+}
+
+val tempRepo = "$buildDir/tempRepo"
+
+publishing {
+    (publications) {
+        "mavenJava"(MavenPublication::class) {
+            from(components["java"])
+            artifact(tasks["sourceJar"])
+            artifact(tasks["javadocJar"])
+
+            pom.withXml {
+                asNode().apply {
+                    appendNode("name", "ecoji-java")
+                    appendNode("description", "A Java implementation of the Ecoji encoding standard")
+                    appendNode("url", "https://github.com/netvl/ecoji-java")
+                    appendNode("licenses").apply {
+                        appendNode("license").apply {
+                            appendNode("name", "Apache 2.0")
+                            appendNode("url", "https://raw.githubusercontent.com/netvl/ecoji-java/master/LICENSE")
+                            appendNode("distribution", "repo")
+                        }
+                    }
+                    appendNode("developers").apply {
+                        appendNode("developer").apply {
+                            appendNode("name", "Vladimir Matveev")
+                            appendNode("email", "vladimir.matweev@gmail.com")
+                            appendNode("url", "https://github.com/netvl")
+                        }
+                    }
+                    appendNode("scm").apply {
+                        appendNode("connection", "scm:git:https://github.com/netvl/ecoji-java")
+                        appendNode("developerConnection", "scm:git:git@github.com:netvl/ecoji-java.git")
+                        appendNode("url", "https://github.com/netvl/ecoji-java")
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            setUrl(tempRepo)
+        }
+    }
+}
+
+bintray {
+    run {
+        val propsPath = projectDir.toPath().resolve("bintray.properties")
+        val props = Properties()
+        Files.newBufferedReader(propsPath).use { props.load(it) }
+
+        user = props.getProperty("bintray.user")
+        key = props.getProperty("bintray.key")
+        pkg.version.gpg.passphrase = props.getProperty("bintray.gpg.passphrase")
+        pkg.version.mavenCentralSync.user = props.getProperty("sonatype.user")
+        pkg.version.mavenCentralSync.password = props.getProperty("sonatype.password")
+    }
+
+    override = true
+    publish = false
+
+    setPublications("mavenJava")
+
+    filesSpec(closureOf<RecordingCopyTask> {
+        dependsOn(tasks["publish"])
+        from(tempRepo) {
+            // looks like bintray does not support uploading sha1, but including then just in case
+            include("**/*.sha1")
+            include("**/*.md5")
+            exclude("**/maven-metadata.xml*")
+        }
+        into(".")
+    })
+
+    pkg.run {
+        repo = "maven"
+        name = "ecoji-java"
+        version.run {
+            name = project.version.toString()
+            gpg.run {
+                sign = true
+            }
         }
     }
 }
@@ -131,6 +223,17 @@ tasks {
     }
 
     "gitPublishCopy" {
-        dependsOn(tasks["javadoc"])
+        dependsOn("javadoc"())
+    }
+
+    "sourceJar"(Jar::class) {
+        classifier = "sources"
+        from(java.sourceSets["main"].allJava)
+    }
+
+    "javadocJar"(Jar::class) {
+        classifier = "javadoc"
+        from("javadoc"(Javadoc::class).destinationDir)
+        dependsOn("javadoc"())
     }
 }

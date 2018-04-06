@@ -4,3 +4,4 @@ out/
 target/
 *.iml
 .idea/
+bintray.properties
