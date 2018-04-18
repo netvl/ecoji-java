@@ -1,6 +1,6 @@
 # Ecoji [![Maven](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/io/github/netvl/ecoji/ecoji/maven-metadata.xml.svg?style=flat-square)](http://search.maven.org/#artifactdetails%7Cio.github.netvl.ecoji%7Cecoji%7C1.0.0%7Cjar)  [![Travis](https://img.shields.io/travis/netvl/ecoji-java.svg?style=flat-square)](https://travis-ci.org/netvl/ecoji-java) [![Javadocs](https://img.shields.io/badge/documentation-docs.rs-green.svg?style=flat-square)](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/package-summary.html)
 
-A Rust implementation of the [Ecoji](https://github.com/keith-turner/ecoji) encoding standard.
+A Java implementation of the [Ecoji](https://github.com/keith-turner/ecoji) encoding standard.
 
 Provides an API for encoding and decoding data as a base-1024 sequence of emojis.
 
