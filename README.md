@@ -4,6 +4,8 @@ A Java implementation of the [Ecoji](https://github.com/keith-turner/ecoji) enco
 
 Provides an API for encoding and decoding data as a base-1024 sequence of emojis.
 
+Visit [ecoji.io](https://ecoji.io) to try Ecoji in your browser.
+
 ## Usage
 
 This library is published to Maven Central, so you can add it to your dependencies configuration in your build tool of choice.
