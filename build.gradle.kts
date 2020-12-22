@@ -1,8 +1,6 @@
-import com.jfrog.bintray.gradle.Artifact
-import com.jfrog.bintray.gradle.BintrayExtension
-import com.jfrog.bintray.gradle.RecordingCopyTask
+import com.jfrog.bintray.gradle.tasks.entities.Artifact
+import com.jfrog.bintray.gradle.tasks.RecordingCopyTask
 import org.ajoberstar.gradle.git.publish.GitPublishExtension
-import org.gradle.plugins.ide.idea.model.IdeaModel
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
@@ -18,7 +16,7 @@ plugins {
     `maven-publish`
     id("com.adarshr.test-logger").version("1.1.2")
     id("org.ajoberstar.git-publish").version("0.3.3")
-    id("com.jfrog.bintray").version("1.7.3")
+    id("com.jfrog.bintray").version("1.8.5")
 }
 
 repositories {
@@ -39,12 +37,15 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_7
 
     sourceSets {
-        "main" {
+        main {
             java {
                 srcDirs(generatedSourcesDir)
             }
         }
     }
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 idea {
@@ -63,7 +64,7 @@ gitPublish {
     branch = "gh-pages"
 
     contents {
-        from(tasks["javadoc"]) {
+        from(tasks.javadoc) {
             into("api")
         }
     }
@@ -72,11 +73,9 @@ gitPublish {
 val tempRepo = "$buildDir/tempRepo"
 
 publishing {
-    (publications) {
-        "mavenJava"(MavenPublication::class) {
+    publications {
+        register<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks["sourceJar"])
-            artifact(tasks["javadocJar"])
 
             pom.withXml {
                 asNode().apply {
@@ -109,7 +108,8 @@ publishing {
 
     repositories {
         maven {
-            setUrl(tempRepo)
+            name = "tempRepo"
+            url = uri(tempRepo)
         }
     }
 }
@@ -133,7 +133,7 @@ bintray {
     setPublications("mavenJava")
 
     filesSpec(closureOf<RecordingCopyTask> {
-        dependsOn(tasks["publish"])
+        dependsOn(tasks.publish)
         from(tempRepo) {
             // looks like bintray does not support uploading sha1, but including then just in case
             include("**/*.sha1")
@@ -209,31 +209,20 @@ tasks {
         }
     }
 
-    "test"(Test::class) {
+    test {
         useJUnitPlatform()
     }
 
-    "compileJava" {
+    compileJava {
         dependsOn(generateEmojiMapping)
     }
 
-    "compileTestJava"(JavaCompile::class) {
+    compileTestJava {
         sourceCompatibility = "1.8"
         targetCompatibility = "1.8"
     }
 
-    "gitPublishCopy" {
-        dependsOn("javadoc"())
-    }
-
-    "sourceJar"(Jar::class) {
-        classifier = "sources"
-        from(java.sourceSets["main"].allJava)
-    }
-
-    "javadocJar"(Jar::class) {
-        classifier = "javadoc"
-        from("javadoc"(Javadoc::class).destinationDir)
-        dependsOn("javadoc"())
+    gitPublishCopy {
+        dependsOn(javadoc)
     }
 }
