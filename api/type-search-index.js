@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"io.github.netvl.ecoji","l":"Ecoji.Decoder"},{"p":"io.github.netvl.ecoji","l":"Ecoji"},{"p":"io.github.netvl.ecoji","l":"Ecoji.Encoder"},{"p":"io.github.netvl.ecoji","l":"Ecoji.Decoder.Target"},{"p":"io.github.netvl.ecoji","l":"Ecoji.Encoder.Target"}]
