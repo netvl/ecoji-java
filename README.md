@@ -1,4 +1,8 @@
-# Ecoji [![Maven](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/io/github/netvl/ecoji/ecoji/maven-metadata.xml.svg?style=flat-square)](http://search.maven.org/#artifactdetails%7Cio.github.netvl.ecoji%7Cecoji%7C1.0.0%7Cjar)  [![Travis](https://img.shields.io/travis/netvl/ecoji-java.svg?style=flat-square)](https://travis-ci.org/netvl/ecoji-java) [![Javadocs](https://img.shields.io/badge/documentation-docs.rs-green.svg?style=flat-square)](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/package-summary.html)
+# Ecoji [![Maven][maven]](https://search.maven.org/artifact/io.github.netvl.ecoji/ecoji) [![Build][actions]](https://github.com/netvl/ecoji-java/actions?query=workflow%3ACI) [![Javadocs][docs]](https://www.javadoc.io/doc/io.github.netvl.ecoji/ecoji/latest/index.html)
+
+  [maven]: https://img.shields.io/maven-central/v/io.github.netvl.ecoji/ecoji?style=flat-square
+  [actions]: https://img.shields.io/github/workflow/status/netvl/ecoji-java/CI/master?style=flat-square
+  [docs]: https://img.shields.io/badge/documentation-javadoc-green.svg?style=flat-square
 
 A Java implementation of the [Ecoji](https://github.com/keith-turner/ecoji) encoding standard.
 
@@ -44,7 +48,7 @@ String decoded = Ecoji.getDecoder().readFrom(encoded).writeToString();
 assert decoded.equals("hello world");
 ```
 
-See [javadocs](https://netvl.github.io/ecoji-java/api/io/github/netvl/ecoji/package-summary.html) for more information.
+See [javadocs](https://www.javadoc.io/doc/io.github.netvl.ecoji/ecoji/latest/index.html) for more information.
 
 ## License
 
