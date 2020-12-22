@@ -116,6 +116,11 @@ publishing {
 
 bintray {
     run {
+        // Skip configuration if on CI
+        if (System.getenv("CI") != null) {
+            return@run
+        }
+
         val propsPath = projectDir.toPath().resolve("bintray.properties")
         val props = Properties()
         Files.newBufferedReader(propsPath).use { props.load(it) }
